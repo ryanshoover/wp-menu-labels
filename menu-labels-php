@@ -1,0 +1,65 @@
+<?php
+/*
+Plugin Name: Navigation menu labels
+Plugin URI: http://ryan.hoover.ws
+Description: Provides a second label for navigation menus
+Version: 0.1
+Author: Ryan Hoover
+Author URI: http://ryan.hoover.ws
+*/
+
+class rsh_menulabel2 {
+	// *****
+	// Initializes by setting filters and administration functions
+	function __construct() {
+		
+		// add custom menu fields to menu
+		add_filter( 'wp_setup_nav_menu_item', array( $this, 'rsh_add_menulabel2' ) );
+
+		// save menu custom fields
+		add_action( 'wp_update_nav_menu_item', array( $this, 'rsh_update_menulabel2'), 10, 3 );
+		
+		// edit menu walker
+		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'rsh_menulabel2_edit_walker'), 10, 2 );
+		
+		// display menu walker
+		add_filter( 'walker_nav_menu_start_el', array($this, 'rsh_menulabel2_display'), 10, 2 );
+	}
+	
+	// *****
+	// add menu label to $menu_item for walker
+	function rsh_add_menulabel2( $menu_item ) {
+		$menu_item->label2 = get_post_meta( $menu_item->ID, '_menu_item_menulabel2', true );
+		return $menu_item;
+	}
+	
+	// *****
+	// save menu label to post meta
+	function rsh_update_menulabel2( $menu_id, $menu_item_db_id, $args ) {
+	  // Check if element is properly sent
+	  if ( is_array( $_REQUEST['menu-item-menulabel2']) ) {
+	      $menulabel2_value = $_REQUEST['menu-item-menulabel2'][$menu_item_db_id];
+	      update_post_meta( $menu_item_db_id, '_menu_item_menulabel2', $menulabel2_value );
+	  }
+	}
+	
+	// *****
+	// Define new Walker for nav menu edit
+	function rsh_menulabel2_edit_walker($walker, $menu_id) {
+		return 'Walker_Nav_Menu_Edit_Custom';   
+	}
+	
+	// *****
+	// Define new Walker for nav menu display
+	function rsh_menulabel2_display($item_output, $item) {
+		//var_dump($item);
+		return '<span class="menu-label">' .$item->label2 .'</span> ' .$item_output;
+	}
+
+}
+
+// *****
+// instantiate plugin's class
+$GLOBALS['rsh-menu-labels'] = new rsh_menulabel2();
+// load custom walker file
+include_once( 'edit_custom_walker.php' );
