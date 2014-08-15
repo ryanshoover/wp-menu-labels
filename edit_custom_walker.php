@@ -193,7 +193,7 @@ class Walker_Nav_Menu_Edit_Custom extends Walker_Nav_Menu {
         <p class="field-custom description description-wide">
             <label for="edit-menu-item-menulabel2-<?php echo $item_id; ?>">
                 <?php _e( 'Menu Label' ); ?><br />
-                <input type="text" id="edit-menu-item-menulabel2-<?php echo $item_id; ?>" class="widefat code edit-menu-item-custom" name="menu-item-menulabel2[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $item->menulabel2 ); ?>" />
+                <input type="text" id="edit-menu-item-menulabel2-<?php echo $item_id; ?>" class="widefat code edit-menu-item-custom" name="menu-item-menulabel2[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $item->label2 ); ?>" />
             </label>
         </p>
         <?php
